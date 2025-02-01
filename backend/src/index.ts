@@ -17,3 +17,5 @@ app.use("/api/messages", messageRoutes);
 app.listen(3300, () => {
     console.log("Server is running on 3300 port");
 });
+
+// TODO add socket.io for server and configure this for the deployment
