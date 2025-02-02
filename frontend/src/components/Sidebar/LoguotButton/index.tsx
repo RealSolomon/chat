@@ -1,8 +1,11 @@
 import { LogOut } from "lucide-react";
+import { useLogout } from "../../../services/mutations";
 
 const LogoutButton = () => {
+    const { mutate } = useLogout();
+
     const logout = () => {
-        alert("You are logged out");
+        mutate();
     };
 
     return (

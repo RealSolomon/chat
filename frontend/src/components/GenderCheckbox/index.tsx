@@ -1,4 +1,7 @@
-const GenderCheckbox = () => {
+import { FC } from "react";
+import { IProps } from "./types";
+
+const GenderCheckbox: FC<IProps> = ({ selectedGender, onChange }) => {
     return (
         <div className="flex gap-5">
             <div className="form-control">
@@ -6,8 +9,9 @@ const GenderCheckbox = () => {
                     <span className="label-text">Male</span>
                     <input
                         type="checkbox"
-                        defaultChecked
+                        checked={selectedGender === "male"}
                         className="checkbox checkbox-info"
+                        onChange={onChange("male")}
                     />
                 </label>
             </div>
@@ -16,8 +20,9 @@ const GenderCheckbox = () => {
                     <span className="label-text">Female</span>
                     <input
                         type="checkbox"
-                        defaultChecked
+                        checked={selectedGender === "female"}
                         className="checkbox checkbox-info"
+                        onChange={onChange("female")}
                     />
                 </label>
             </div>
