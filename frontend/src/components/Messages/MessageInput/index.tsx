@@ -1,12 +1,13 @@
 import { Send } from "lucide-react";
 import { useSendMessage } from "../../../services/mutations";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import useConversation from "../../../store/useConversation";
+import { useSnackbar } from "notistack";
 
 const MessageInput = () => {
     const { selectedConversation } = useConversation();
+    const { enqueueSnackbar } = useSnackbar();
     const sendMessage = useSendMessage();
-    console.log(selectedConversation?.id, "selectedConversation");
 
     const [message, setMessage] = useState("");
 
@@ -23,6 +24,15 @@ const MessageInput = () => {
         });
         setMessage("");
     };
+
+    useEffect(() => {
+        if (sendMessage.isError) {
+            enqueueSnackbar("Failed to send message", {
+                variant: "error",
+                anchorOrigin: { vertical: "top", horizontal: "left" },
+            });
+        }
+    }, [sendMessage.isError, enqueueSnackbar]);
 
     return (
         <form className="px-4 mb-3" onSubmit={handleSubmit}>

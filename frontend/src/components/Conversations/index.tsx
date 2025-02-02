@@ -1,14 +1,14 @@
+import { FC } from "react";
 import { useConversations } from "../../services/queries";
 import Conversation from "./Conversation";
+import { IProps } from "./types";
 
-const Conversations = () => {
-    const { data, isPending } = useConversations();
-
-    console.log(data, "data");
+const Conversations: FC<IProps> = ({ data }) => {
+    const { isPending } = useConversations();
 
     return (
-        <div className="py-2 flex flex-col overflow-auto">
-            {data?.length &&
+        <div className="pb-2 flex flex-col overflow-auto gap-1.5">
+            {!!data?.length &&
                 data.map((conversation) => (
                     <Conversation
                         key={conversation.id}

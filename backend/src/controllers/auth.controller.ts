@@ -49,6 +49,7 @@ export const signup = async (req: Request, res: Response) => {
                 id: newUser.id,
                 fullName: newUser.fullName,
                 username: newUser.username,
+                gender,
                 profilePicture: newUser.profilePicture,
             });
         } else {

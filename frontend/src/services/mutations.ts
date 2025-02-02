@@ -3,8 +3,12 @@ import { login, logout, sendMessage, signUp } from "./api";
 import { IFormInputs, ILoginFormInputs } from "../models/IForm";
 
 export const useSignUp = () => {
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (data: IFormInputs) => signUp(data),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["authUser"] });
+        },
     });
 };
 

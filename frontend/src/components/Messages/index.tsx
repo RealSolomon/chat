@@ -11,7 +11,7 @@ const Messages = () => {
         <div className="px-4 flex-1 overflow-auto">
             {isPending &&
                 [...Array(3)].map((_, idx) => <MessageSkeleton key={idx} />)}
-            {data?.length &&
+            {!!data?.length &&
                 data.map((message) => (
                     <Message key={message.id} message={message} />
                 ))}

@@ -1,11 +1,14 @@
 import { Link } from "react-router";
 import { useLogin } from "../../services/mutations";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { ILoginFormInputs } from "../../models/IForm";
+import { useSnackbar } from "notistack";
 import FormInput from "../../components/FormInput";
 
 const Login = () => {
     const loginMutation = useLogin();
+    const { enqueueSnackbar } = useSnackbar();
+
     const [formInputs, setFormInputs] = useState<ILoginFormInputs>({
         username: "",
         password: "",
@@ -21,6 +24,16 @@ const Login = () => {
         e.preventDefault();
         loginMutation.mutate(formInputs);
     };
+
+    useEffect(() => {
+        if (loginMutation.isError) {
+            enqueueSnackbar("Failed to login", {
+                variant: "error",
+                anchorOrigin: { vertical: "top", horizontal: "left" },
+            });
+        }
+    }, [loginMutation.isError, enqueueSnackbar]);
+
     return (
         <div className="flex flex-col items-center justify-center min-w-146 mx-auto">
             <div className="w-full p-6 bg-black/20 rounded-2xl shadow-lg shadow-black/10 backdrop-blur-sm">

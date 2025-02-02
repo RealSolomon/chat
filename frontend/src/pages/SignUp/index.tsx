@@ -1,12 +1,14 @@
 import { Link } from "react-router";
 import GenderCheckbox from "../../components/GenderCheckbox";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Gender, IFormInputs } from "../../models/IForm";
 import { useSignUp } from "../../services/mutations";
+import { useSnackbar } from "notistack";
 import FormInput from "../../components/FormInput";
 
 const SignUp = () => {
     const signUpMutation = useSignUp();
+    const { enqueueSnackbar } = useSnackbar();
 
     const [formInputs, setFormInputs] = useState<IFormInputs>({
         fullName: "",
@@ -30,6 +32,15 @@ const SignUp = () => {
         e.preventDefault();
         signUpMutation.mutate(formInputs);
     };
+
+    useEffect(() => {
+        if (signUpMutation.isError) {
+            enqueueSnackbar("There is an error, try again later", {
+                variant: "error",
+                anchorOrigin: { vertical: "top", horizontal: "left" },
+            });
+        }
+    }, [signUpMutation.isError, enqueueSnackbar]);
 
     return (
         <div className="flex flex-col items-center justify-center min-w-146 mx-auto">
