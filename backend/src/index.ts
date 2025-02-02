@@ -6,6 +6,8 @@ import messageRoutes from "./routes/message.route";
 import dotenv from "dotenv";
 dotenv.config();
 
+const PORT = process.env.PORT || 3300;
+
 const app = express();
 
 app.use(cookieParser());
@@ -14,8 +16,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-app.listen(3300, () => {
-    console.log("Server is running on 3300 port");
+app.listen(PORT, () => {
+    console.log(`Server is running on ${PORT} port`);
 });
 
 // TODO add socket.io for server and configure this for the deployment

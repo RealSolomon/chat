@@ -1,10 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAuthUser } from "./api";
+import { getAuthUser, getConversations, getMessages } from "./api";
 
 export const useAuthUser = () => {
     return useQuery({
         queryKey: ["authUser"],
         queryFn: getAuthUser,
+        refetchOnWindowFocus: false,
+    });
+};
+
+export const useConversations = () => {
+    return useQuery({
+        queryKey: ["conversations"],
+        queryFn: getConversations,
+        refetchOnWindowFocus: false,
+    });
+};
+
+export const useMessages = (conversationId: string) => {
+    return useQuery({
+        queryKey: ["messages"],
+        queryFn: () => getMessages(conversationId),
         refetchOnWindowFocus: false,
     });
 };

@@ -1,13 +1,20 @@
-import { IMessage } from "../../../models/IConversation";
+import { MessageType } from "../../../models/IConversation";
+import { useAuthUser } from "../../../services/queries";
+import useConversation from "../../../store/useConversation";
+import { formatTime } from "../../../utils/formatTime";
 
-const Message = ({ message }: { message?: IMessage }) => {
-    const fromMe = message?.fromMe;
-    const chatClass = fromMe ? "chat-end" : "chat-start";
+const Message = ({ message }: { message: MessageType }) => {
+    const { data } = useAuthUser();
+    const { selectedConversation } = useConversation();
+
+    const fromMe = message.senderId === data?.id;
     const img = fromMe
-        ? "https://avatar.iran.liara.run/public/boy?username=johndoe"
-        : "https://avatar.iran.liara.run/public/boy?username=janedoe";
+        ? data?.profilePicture
+        : selectedConversation?.profilePicture;
 
+    const chatClass = fromMe ? "chat-end" : "chat-start";
     const bubbleBg = fromMe ? "bg-blue-500" : "";
+
     return (
         <div className={`chat ${chatClass}`}>
             <div className="hidden md:block chat-image avatar">
@@ -18,10 +25,10 @@ const Message = ({ message }: { message?: IMessage }) => {
             <p
                 className={`chat-bubble text-white ${bubbleBg} text-sm md:text-md`}
             >
-                {message?.body}
+                {message.body}
             </p>
             <span className="chat-footer opacity-50 text-xs flex gap-1 items-center text-white">
-                22:59
+                {formatTime(message.createdAt)}
             </span>
         </div>
     );
