@@ -4,6 +4,7 @@ import "./index.css";
 import { BrowserRouter } from "react-router";
 import App from "./App.tsx";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import SocketContextProvider from "./context/SocketContext.tsx";
 // import {ReactQueryDevTools } from '@tanstack/react-query-dev'
 
 const queryClient = new QueryClient({
@@ -14,7 +15,9 @@ createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <BrowserRouter>
             <QueryClientProvider client={queryClient}>
-                <App />
+                <SocketContextProvider>
+                    <App />
+                </SocketContextProvider>
             </QueryClientProvider>
         </BrowserRouter>
     </StrictMode>

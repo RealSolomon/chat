@@ -19,8 +19,10 @@ export const useConversations = () => {
 
 export const useMessages = (conversationId: string) => {
     return useQuery({
-        queryKey: ["messages"],
+        queryKey: ["messages", conversationId],
         queryFn: () => getMessages(conversationId),
+        enabled: !!conversationId,
         refetchOnWindowFocus: false,
+        refetchOnMount: true,
     });
 };

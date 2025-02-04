@@ -14,6 +14,7 @@ const Message = ({ message }: { message: MessageType }) => {
 
     const chatClass = fromMe ? "chat-end" : "chat-start";
     const bubbleBg = fromMe ? "bg-blue-500" : "";
+    const shakeClass = message.shouldShake ? "shake" : "";
 
     return (
         <div className={`chat ${chatClass}`}>
@@ -23,7 +24,7 @@ const Message = ({ message }: { message: MessageType }) => {
                 </div>
             </div>
             <p
-                className={`chat-bubble text-white ${bubbleBg} text-sm md:text-md`}
+                className={`chat-bubble text-white ${bubbleBg} ${shakeClass} text-sm md:text-md`}
             >
                 {message.body}
             </p>
