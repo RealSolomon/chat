@@ -51,7 +51,7 @@ const MessageInput = () => {
                     {sendMessage.isPending ? (
                         <span className="loading loading-spinner" />
                     ) : (
-                        <Send className="w-6 h-6 text-white" />
+                        <Send className="w-6 h-6 text-white cursor-pointer" />
                     )}
                 </button>
             </div>
