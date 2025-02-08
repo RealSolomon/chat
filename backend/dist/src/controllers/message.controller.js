@@ -1,23 +1,25 @@
-import { Request, Response } from "express";
-import prisma from "../db/prisma";
-import { getReceiverSocketId, io } from "../socket/socket";
-
-export const sendMessage = async (req: Request, res: Response) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getConversations = exports.getMessages = exports.sendMessage = void 0;
+const prisma_1 = __importDefault(require("../db/prisma"));
+const socket_1 = require("../socket/socket");
+const sendMessage = async (req, res) => {
     try {
         const { message } = req.body;
         const { id: recieverId } = req.params;
         const senderId = req.user.id;
-
-        let conversation = await prisma.conversation.findFirst({
+        let conversation = await prisma_1.default.conversation.findFirst({
             where: {
                 particapantIds: {
                     hasEvery: [senderId, recieverId],
                 },
             },
         });
-
         if (!conversation) {
-            conversation = await prisma.conversation.create({
+            conversation = await prisma_1.default.conversation.create({
                 data: {
                     particapantIds: {
                         set: [senderId, recieverId],
@@ -25,17 +27,15 @@ export const sendMessage = async (req: Request, res: Response) => {
                 },
             });
         }
-
-        const newMessage = await prisma.message.create({
+        const newMessage = await prisma_1.default.message.create({
             data: {
                 senderId,
                 body: message,
                 conversationId: conversation.id,
             },
         });
-
         if (newMessage) {
-            conversation = await prisma.conversation.update({
+            conversation = await prisma_1.default.conversation.update({
                 where: {
                     id: conversation.id,
                 },
@@ -48,28 +48,22 @@ export const sendMessage = async (req: Request, res: Response) => {
                 },
             });
         }
-
-        const recieverSocketId = getReceiverSocketId(recieverId);
-
+        const recieverSocketId = (0, socket_1.getReceiverSocketId)(recieverId);
         if (recieverSocketId) {
-            io.to(recieverSocketId).emit("newMessage", newMessage);
+            socket_1.io.to(recieverSocketId).emit("newMessage", newMessage);
         }
-
         res.status(201).json(newMessage);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 };
-
-export const getMessages = async (
-    req: Request,
-    res: Response
-): Promise<any> => {
+exports.sendMessage = sendMessage;
+const getMessages = async (req, res) => {
     try {
         const { id: userToChatId } = req.params;
         const senderId = req.user.id;
-
-        const conversation = await prisma.conversation.findFirst({
+        const conversation = await prisma_1.default.conversation.findFirst({
             where: {
                 particapantIds: {
                     hasEvery: [senderId, userToChatId],
@@ -83,19 +77,19 @@ export const getMessages = async (
                 },
             },
         });
-
-        if (!conversation) return res.status(200).json([]);
+        if (!conversation)
+            return res.status(200).json([]);
         res.status(200).json(conversation.messages);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 };
-
-export const getConversations = async (req: Request, res: Response) => {
+exports.getMessages = getMessages;
+const getConversations = async (req, res) => {
     try {
         const authUserId = req.user.id;
-
-        const users = await prisma.user.findMany({
+        const users = await prisma_1.default.user.findMany({
             where: {
                 id: {
                     not: authUserId,
@@ -107,9 +101,10 @@ export const getConversations = async (req: Request, res: Response) => {
                 profilePicture: true,
             },
         });
-
         res.status(200).json(users);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 };
+exports.getConversations = getConversations;

@@ -8,11 +8,6 @@
 		"strict": true, // Enable all strict type-checking options.
 		"esModuleInterop": true, // Allows use default imports with CommonJS modules.
 		"skipLibCheck": true, // this option will skip type checking all .d.ts files.
-		"baseUrl": ".",
-		"paths": {
-			"@components/*": ["src/components/*"],
-			"@/*": ["src/*"]
-		}
 	},
 	"ts-node": {
 		"transpileOnly": true,

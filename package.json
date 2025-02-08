@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --watch backend/src --exec ts-node backend/src/index.ts"
+    "dev": "nodemon --watch backend/src --exec ts-node backend/src/index.ts",
+    "build": "tsc && yarn install && prisma generate --schema=./backend/prisma/schema.prisma && yarn install --prefix frontend && yarn build --prefix frontend",
+    "start": "node backend/dist/src/index.js"
   },
   "keywords": [],
   "author": "",
